@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CHIMERA Report — {{ date }}</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            padding: 40px;
+            font-size: 11pt;
+            line-height: 1.6;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #6c63ff;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24pt;
+            font-weight: 600;
+            background: linear-gradient(135deg, #6c63ff, #00d2ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .header .subtitle {
+            color: #8888aa;
+            font-size: 12pt;
+        }
+
+        .header .date {
+            color: #00d2ff;
+            font-size: 14pt;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14pt;
+            color: #6c63ff;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            border-left: 3px solid #6c63ff;
+            padding-left: 10px;
+        }
+
+        .executive-summary {
+            background: rgba(108, 99, 255, 0.1);
+            border: 1px solid rgba(108, 99, 255, 0.3);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            font-size: 11pt;
+        }
+
+        .section {
+            margin-bottom: 18px;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .section p { margin-bottom: 8px; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: rgba(108, 99, 255, 0.08);
+            border: 1px solid rgba(108, 99, 255, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .stat-box .value {
+            font-size: 18pt;
+            font-weight: 600;
+            color: #00d2ff;
+        }
+
+        .stat-box .label {
+            font-size: 8pt;
+            color: #8888aa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 9pt;
+        }
+
+        th {
+            background: rgba(108, 99, 255, 0.15);
+            color: #6c63ff;
+            padding: 8px 10px;
+            text-align: left;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(108, 99, 255, 0.3);
+        }
+
+        td {
+            padding: 6px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        tr:nth-child(even) { background: rgba(255, 255, 255, 0.02); }
+
+        .rule-bar {
+            display: flex;
+            align-items: center;
+            margin: 4px 0;
+        }
+
+        .rule-bar .label {
+            width: 120px;
+            font-size: 9pt;
+            color: #8888aa;
+        }
+
+        .rule-bar .bar {
+            height: 18px;
+            background: linear-gradient(90deg, #6c63ff, #00d2ff);
+            border-radius: 3px;
+            min-width: 4px;
+        }
+
+        .rule-bar .count {
+            margin-left: 8px;
+            font-size: 9pt;
+            color: #e0e0e0;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: #555;
+            font-size: 8pt;
+        }
+
+        @media print {
+            body { background: white; color: #222; padding: 20px; }
+            .header h1 { color: #6c63ff; -webkit-text-fill-color: #6c63ff; }
+            .stat-box .value { color: #6c63ff; }
+            th { color: #333; }
+            td { color: #333; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CHIMERA DATA PROCESSOR</h1>
+        <div class="subtitle">Lay Engine Session Analysis Report</div>
+        <div class="date">{{ date }}</div>
+    </div>
+
+    <!-- Executive Summary -->
+    <div class="executive-summary">
+        <strong>Executive Summary:</strong> {{ analysis.executive_summary }}
+    </div>
+
+    <!-- Summary Stats -->
+    <div class="stats-grid">
+        <div class="stat-box">
+            <div class="value">{{ sessions|length }}</div>
+            <div class="label">Sessions</div>
+        </div>
+        <div class="stat-box">
+            <div class="value">{{ bets|length }}</div>
+            <div class="label">Bets Placed</div>
+        </div>
+        <div class="stat-box">
+            <div class="value">£{{ "%.2f"|format(summary.get('total_stake', 0)) }}</div>
+            <div class="label">Total Stake</div>
+        </div>
+        <div class="stat-box">
+            <div class="value">£{{ "%.2f"|format(summary.get('total_liability', 0)) }}</div>
+            <div class="label">Total Liability</div>
+        </div>
+    </div>
+
+    <!-- Rule Distribution -->
+    <h2>Rule Distribution</h2>
+    <div class="section">
+        <p>{{ analysis.rule_distribution.analysis }}</p>
+        {% set counts = analysis.rule_distribution.get('counts', {}) %}
+        {% set max_count = counts.values()|list|max if counts.values()|list else 1 %}
+        {% for rule, count in counts.items() %}
+        <div class="rule-bar">
+            <span class="label">{{ rule }}</span>
+            <div class="bar" style="width: {{ (count / max_count * 300)|int }}px;"></div>
+            <span class="count">{{ count }}</span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Odds Drift Patterns -->
+    <h2>Odds Drift Patterns</h2>
+    <div class="section">
+        <p>{{ analysis.odds_drift_patterns }}</p>
+    </div>
+
+    <!-- Risk Exposure -->
+    <h2>Risk Exposure</h2>
+    <div class="section">
+        <p>{{ analysis.risk_exposure }}</p>
+        {% if analysis.pnl_estimate %}
+        <p><strong>Risk Ratio:</strong> {{ analysis.pnl_estimate.risk_ratio }}x | {{ analysis.pnl_estimate.notes }}</p>
+        {% endif %}
+    </div>
+
+    <!-- Venue Patterns -->
+    <h2>Venue Patterns</h2>
+    <div class="section">
+        <p>{{ analysis.venue_patterns }}</p>
+    </div>
+
+    <!-- Timing Observations -->
+    <h2>Timing Observations</h2>
+    <div class="section">
+        <p>{{ analysis.timing_observations }}</p>
+    </div>
+
+    <!-- Anomalies -->
+    <h2>Anomalies & Notable Events</h2>
+    <div class="section">
+        <p>{{ analysis.anomalies }}</p>
+    </div>
+
+    <!-- Win/Loss Analysis -->
+    <h2>Win/Loss Analysis</h2>
+    <div class="section">
+        <p>{{ analysis.win_loss_analysis }}</p>
+    </div>
+
+    <!-- Suggestions -->
+    <h2>Actionable Suggestions</h2>
+    <div class="section">
+        <p>{{ analysis.suggestions }}</p>
+    </div>
+
+    <!-- Additional Insights -->
+    {% if analysis.additional_insights %}
+    <h2>Additional Insights</h2>
+    <div class="section">
+        <p>{{ analysis.additional_insights }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Bets Table -->
+    <h2>Bets Detail</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Runner</th>
+                <th>Venue</th>
+                <th>Odds</th>
+                <th>Stake</th>
+                <th>Liability</th>
+                <th>Rule</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for b in bets %}
+            <tr>
+                <td>{{ b.timestamp[:16] if b.timestamp else '—' }}</td>
+                <td>{{ b.runner_name or '—' }}</td>
+                <td>{{ b.venue or '—' }}</td>
+                <td>{{ b.price or '—' }}</td>
+                <td>£{{ "%.2f"|format(b.size or 0) }}</td>
+                <td>£{{ "%.2f"|format(b.liability or 0) }}</td>
+                <td>{{ b.rule_applied or '—' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        Generated by CHIMERA Data Processor | {{ date }}
+    </div>
+</body>
+</html>
