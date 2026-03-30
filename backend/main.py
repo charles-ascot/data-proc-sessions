@@ -54,7 +54,7 @@ log = logging.getLogger("main")
 # ── Config ───────────────────────────────────────────────────
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
-FRONTEND_URL = os.environ.get("FRONTEND_URL", "https://datasessions.thync.online")
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:5173")
 POLL_INTERVAL = int(os.environ.get("POLL_INTERVAL_MINUTES", "15"))
 
 # ── Lazy AI clients ──────────────────────────────────────────
